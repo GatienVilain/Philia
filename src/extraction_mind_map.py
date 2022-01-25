@@ -7,7 +7,7 @@ class texte:
         self.numero = ""  # numero d'emplacement
         self.image = False  # etat image
         self.titre = False  # etat titre
-        # sinon texte
+        self.sous_titre = False
 
 
 def charge_fichier(nom):  # nom = chemin du fichier
@@ -59,7 +59,56 @@ def detection_titre(L):
                 "-", "")  # supression des tirets
             elem.titre = True  # on indique que l'element est un titre
             L_triee.append(elem)
+        if elem.contenu[0] == '/':  # detection sous titre
+            elem.contenu = elem.contenu.replace("/", "")  # supression des /
+            elem.sous_titre = True  # on indique que l'element est un sous titre
+            L_triee.append(elem)
         else:
             L_triee.append(elem)  # sinon on ne modifie pas l'element
 
     return(L_triee)
+
+
+def decoupage(L):
+    i = 0
+    L_dec = []
+
+    while i < (len(L)-1):
+        Ltampon = []
+        if L[i].titre == True and i < len(L)-1:
+            Ltampon.append(L[i])
+            i = i+1
+            while L[i].titre == False and i < len(L)-1:
+                Ltampon.append(L[i])
+                i = i+1
+
+        else:
+
+            i = i+1
+        Ltampon.append(L[-1])
+        L_dec.append(Ltampon)
+
+    return(L_dec)
+
+
+##########################################################################################
+"""
+
+l=extraction_texte('TITRE4.mm')
+l=decoupage(l)
+
+
+
+for k in l:
+    for x in k:
+        if x.sous_titre==True:
+            print('----')
+        print (x.contenu,x.titre)
+        if x.sous_titre==True:
+            print('----')
+    print('--------------------------------------------- \n\n\n')
+
+
+for k in range (2,5):
+    print(k)
+"""
