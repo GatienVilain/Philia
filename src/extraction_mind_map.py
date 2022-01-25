@@ -92,23 +92,18 @@ def decoupage(L):
 
 
 ##########################################################################################
-"""
+if __name__ == '__main__':
+    l = extraction_texte('TITRE4.mm')
+    l = decoupage(l)
 
-l=extraction_texte('TITRE4.mm')
-l=decoupage(l)
+    for k in l:
+        for x in k:
+            if x.sous_titre == True:
+                print('----')
+            print(x.contenu, x.titre)
+            if x.sous_titre == True:
+                print('----')
+        print('--------------------------------------------- \n\n\n')
 
-
-
-for k in l:
-    for x in k:
-        if x.sous_titre==True:
-            print('----')
-        print (x.contenu,x.titre)
-        if x.sous_titre==True:
-            print('----')
-    print('--------------------------------------------- \n\n\n')
-
-
-for k in range (2,5):
-    print(k)
-"""
+    for k in range(2, 5):
+        print(k)
