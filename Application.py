@@ -199,12 +199,30 @@ def forget(widget):
 def retrieve(widget):
     widget.pack() 
 
-def verificationFichier(adresse) :
+def verificationFichier(adresse, cadreInitial, cadreFinal, boutonGenerer, labelErreur):
     if(adresse[-3:] == ".mm"):
-        return True
+        boutonGenerer['style'] = 'W2.TButton'
+        forget(labelErreur)
+        generer(cadreInitial, cadreFinal)
 
-    return False
- 
+        
+    else:
+        boutonGenerer['style'] = 'W3.TButton'
+        labelErreur.pack(side = BOTTOM, fill = BOTH)
+        fileentry_sequence.entry.delete(0, END)
+
+def generer(cadreInitial, cadreFinal):
+    forget(cadreInitial) 
+    retrieve(cadreFinal)
+    adresseMindMap = fileentry_sequence.get_path()
+    adresseSite = folderentry_sequence.get_path()
+
+    if adresseSite == "":
+        adresseSite = "C:\\"
+
+    #Rajouter appel fonction pour générer le site
+
+
 
 def affichageEcranInit(cadreInitial, cadreFinal, styleButton):
     styleFrame1= ttk.Style()
@@ -217,7 +235,7 @@ def affichageEcranInit(cadreInitial, cadreFinal, styleButton):
     frame2 = ttk.Frame(cadreInitial, width=400, height=70)
     frame2.pack(side = BOTTOM)
     frame3 = ttk.Frame(cadreInitial, width=80, height=30, style = 'frame2.TFrame')
-    frame3.place(x = 150, y = 150)
+    frame3.place(x = 125, y = 138)
 
     global fileentry_sequence 
     fileentry_sequence = FileEntry(cadreInitial, label="Fichier .mm :")
@@ -225,12 +243,24 @@ def affichageEcranInit(cadreInitial, cadreFinal, styleButton):
     global folderentry_sequence
     folderentry_sequence = FolderEntry(cadreInitial, label ="Enregistrer :")
     folderentry_sequence.place(x = 55, y = 70)
+    styleBoutonErreur = ttk.Style()
+    styleBoutonErreur.configure('W3.TButton', font =
+                   ('calibri', 15, 'bold'),
+                    foreground = 'RED', width = 14)
 
-    global boutonGenerer
-    boutonGenerer = ttk.Button(frame3, text ='Générer',style = 'W2.TButton', state = DISABLED, command = lambda : [forget(cadreInitial), retrieve(cadreFinal)])
-    boutonGenerer.pack(fill = BOTH) 
+    boutonGenerer = ttk.Button(frame3, text ='Générer',style = 'W2.TButton', command = lambda : verificationFichier(fileentry_sequence.get_path(), cadreInitial, cadreFinal, boutonGenerer, label))
+    boutonGenerer.pack(fill = BOTH)
+
+    styleLabel = ttk.Style()
+    styleLabel.configure('label.TLabel', font =
+                ('calibri', 12, 'bold'), relief = FLAT)
+    label = ttk.Label(frame3, text = "Fichier .mm incorrect", style = 'label.TLabel')
+    
 
 def ouvrirSite(adresse):
+    if(adresse == ""):
+        adresse = "C:" 
+
     adresse = adresse + "/Site/site.html"
     webbrowser.open("file:///" + adresse)
 
@@ -285,17 +315,12 @@ def creationApplication(titreApplication):
     styleBoutonEcranInit = ttk.Style()
     styleBoutonEcranInit.configure('W2.TButton', font =
                    ('calibri', 15, 'bold'),
-                    foreground = 'BLACK', width = 10)
+                    foreground = 'BLACK', width = 14)
 
     cadreFinal = ttk.Frame(window)
     cadreInitial = ttk.Frame(window)
     affichageEcranInit(cadreInitial, cadreFinal, styleBoutonEcranInit)
     affichageEcranFinal(cadreFinal, cadreInitial, styleBoutonsEcranFinal)
-
-    if (verificationFichier(fileentry_sequence.get_path())):
-        boutonGenerer['state'] = NORMAL
-    else:
-        boutonGenerer['state'] = DISABLED 
         
     #print(fileentry_sequence.get_path()) #Permet de récupérer l'adresse du fichier.mm
 
@@ -304,8 +329,7 @@ def creationApplication(titreApplication):
     window.mainloop()
 
 creationApplication('Générateur de site web')
-print(verificationFichier(fileentry_sequence.get_path()))
-print(fileentry_sequence.get_path()) #Permet de récupérer l'adresse du fichier.mm
+fileentry_sequence.get_path() #Permet de récupérer l'adresse du fichier.mm
 folderentry_sequence.get_path() #Permet de récupérer l'adresse de sauvegarde
 
 
