@@ -1,2 +1,5 @@
 .vs
 src/__pycache__
+site
+*.mm
+*test*
