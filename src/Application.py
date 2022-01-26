@@ -296,7 +296,7 @@ def affichageEcranFinal(cadreFinal, cadreInitial, styleButton):
     label = ttk.Label(frame1, text="Site Web généré", style='label.TLabel')
     label.place(x=145, y=30)
 
-    photo = PhotoImage(file='./src/images/valider.png')
+    photo = PhotoImage(file='./images/valider.png')
     canvas = Canvas(frame1, width=45, height=45)
     canvas.create_image(0, 0, anchor=NW, image=photo)
     canvas.image = photo
@@ -317,7 +317,7 @@ def creationApplication(titreApplication):
     window = Tk()
     window.title(titreApplication)
     window.geometry("400x200")
-    window.iconphoto(False, PhotoImage(file="./src/images/icon.png"))
+    window.iconphoto(False, PhotoImage(file="./images/icon.png"))
     window.resizable(width=0, height=0)
 
     # Fin création fenêtre application
