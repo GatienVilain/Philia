@@ -46,12 +46,12 @@ h3 {
     margin: 0;
     list-style: none;
     font-size: 200%;
+    z-index: 50;
 }
 
 #menu-deroulant li {
     /* on place les liens du menu horizontalement */
     display: inline-block;
-    z-index: 1024;
 }
 
 #menu-deroulant ul li {
@@ -61,6 +61,7 @@ h3 {
     background: #818181;
     box-shadow: 0px 1px 2px black;
     background-size: 1000px 200px;
+    z-index: 2024;
 }
 
 #menu-deroulant a {
@@ -93,6 +94,7 @@ h3 {
 #imageprinc img {
     width: 80%;
     opacity: 0.8;
+    z-index: 1;
 }
 
 #uneimage {
