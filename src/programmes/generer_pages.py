@@ -1,6 +1,6 @@
 import os
-from programmes.extraction_mind_map import *
-from programmes.copie import *
+from extraction_mind_map import *
+from copie import *
 
 
 def generer_page(chemin_destination, liste_element):
@@ -19,7 +19,7 @@ def generer_page(chemin_destination, liste_element):
                     "\">\n\t<h3 id=\"" + element.contenu.replace(" ", "-") + "\">" + element.contenu + "</h3>\n\t"
                 section_ouvert = True
             elif element.image:
-                contenu_html += "<center><img id=\"" + element.contenu.replace(" ", "-") + "\" src=\"" + element.contenu + "\" style = \"width:30%\"></center>"
+                contenu_html += "<center><img id=\"" + os.path.basename(element.contenu).replace(" ", "-") + "\" src=\"" + element.contenu + "\" style = \"width:30%\"></center>"
             else:
                 contenu_html += "<p>" + element.contenu + "</p>"
         if section_ouvert:
