@@ -1,4 +1,5 @@
 .vs
 src/__pycache__
+src/programmes/__pycache__
 site
 *test*
