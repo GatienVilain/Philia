@@ -71,26 +71,26 @@ def detection_titre(L):
 
 def creer_liste_tampon(L, i):
     L_tampon = []
-    L_tampon.append(L[i])
+    L_tampon.append(L[i])                       #on cree systematiquement le premier element de la liste 
     Bool = False
-    if i+1 < len(L)-1:
+    if i+1 < len(L)-1:                          #si element suivant n'est pas un titre on doit creer une page remplie 
         i = i+1
-        while L[i].titre == False and i < len(L)-1:
+        while L[i].titre == False and i < len(L)-1: #on lit jusqu'au titre suivant
             if Bool == False:
                 Bool = True
             L_tampon.append(L[i])
             i = i+1
-        if Bool and i == len(L)-1:
+        if Bool and i == len(L)-1:              #si on arrive a la dernière page du site il faut un cas particulier pour ne pas faire de depassement de liste
             L_tampon.append(L[i])
     return (L_tampon, i+1)
 
 
-def decoupage(L):
+def decoupage(L):                               #pour creer une liste de listes ou chaque liste est une page html
     i = 0
     L_dec = []
     while i < len(L):
         Lt = []
-        Lt, i = creer_liste_tampon(L, i)
+        Lt, i = creer_liste_tampon(L, i)        #on cree une liste tampon qui deviebndra ensuite un element de ma liste de sortie
         L_dec.append(Lt)
     return(L_dec)
 
@@ -107,7 +107,3 @@ if __name__ == '__main__':
             print(x.contenu, x.titre)
             if x.sous_titre == True:
                 print('----')
-        print('--------------------------------------------- \n\n\n')
-
-    for k in range(2, 5):
-        print(k)
