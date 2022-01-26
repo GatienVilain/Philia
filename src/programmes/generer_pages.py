@@ -1,6 +1,6 @@
 import os
-from extraction_mind_map import *
-from copie import *
+from programmes.extraction_mind_map import *
+from programmes.copie import *
 
 
 def generer_page(chemin_destination, liste_element):
