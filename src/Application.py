@@ -3,9 +3,10 @@ import tkinter.filedialog as FD
 import tkinter.messagebox as MB
 import webbrowser
 import os
+from pathlib import Path
 
 import tkinter.ttk as ttk
-from generer_pages import *
+from programmes.generer_pages import *
 
 
 class FileEntry (ttk.Frame):
@@ -39,15 +40,23 @@ class FileEntry (ttk.Frame):
 
                 "Veuillez sélectionner un fichier, SVP:"
             )
+
         )
 
         self.file_path = StringVar()
 
-        self.entry = ttk.Entry(
+        self.entry = Entry(
 
             self,
 
-            textvariable=self.file_path
+            textvariable=self.file_path,
+
+            state=DISABLED,
+
+            disabledbackground="WHITE",
+
+            disabledforeground='BLACK'
+
         )
 
         self.button = ttk.Button(
@@ -130,11 +139,17 @@ class FolderEntry (ttk.Frame):
 
         self.file_path = StringVar()
 
-        self.entry = ttk.Entry(
+        self.entry = Entry(
 
             self,
 
-            textvariable=self.file_path
+            textvariable=self.file_path,
+
+            state=DISABLED,
+
+            disabledbackground="WHITE",
+
+            disabledforeground='BLACK'
         )
 
         self.button = ttk.Button(
@@ -211,7 +226,7 @@ def generer(cadreInitial, cadreFinal):
     adresseSite = folderentry_sequence.get_path()
 
     if adresseSite == "":
-        adresseSite = "C:\\"
+        adresseSite = str(Path.home() / "Downloads")
 
     # Rajouter appel fonction pour générer le site
     generer_pages(adresseMindMap, adresseSite)
@@ -255,7 +270,7 @@ def affichageEcranInit(cadreInitial, cadreFinal, styleButton):
 
 def ouvrirSite(adresse):
     if(adresse == ""):
-        adresse = "C:"
+        adresse = str(Path.home() / "Downloads")
 
     adresse = adresse + "/site/index.html"
     webbrowser.open("file:///" + adresse)
@@ -281,7 +296,7 @@ def affichageEcranFinal(cadreFinal, cadreInitial, styleButton):
     label = ttk.Label(frame1, text="Site Web généré", style='label.TLabel')
     label.place(x=145, y=30)
 
-    photo = PhotoImage(file='./src/valider.png')
+    photo = PhotoImage(file='./src/images/valider.png')
     canvas = Canvas(frame1, width=45, height=45)
     canvas.create_image(0, 0, anchor=NW, image=photo)
     canvas.image = photo
@@ -302,6 +317,7 @@ def creationApplication(titreApplication):
     window = Tk()
     window.title(titreApplication)
     window.geometry("400x200")
+    window.iconphoto(False, PhotoImage(file="./src/images/icon.png"))
     window.resizable(width=0, height=0)
 
     # Fin création fenêtre application
