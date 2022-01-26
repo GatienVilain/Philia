@@ -1,14 +1,16 @@
-import os
+from os import path
+from shutil import copy
+
 
 def copie_css(chemin_destination):
-    os.system("powershell copy ./src/css/site.css " + chemin_destination + "/site/css -erroraction 'silentlycontinue'")
+    copy("./src/css/site.css ", path.abspath(chemin_destination + "/site/css"))
     return
 
+
 def copie_images(chemin_entree, chemin_destination, liste_element):
-    os.system("powershell copy ./src/images/Privilegier_le_parcours_1.png " + chemin_destination + "/site/images -erroraction 'silentlycontinue'")
+    copy("./src/images/Privilegier_le_parcours_1.png", path.abspath(chemin_destination + "/site/images"))
     for element in liste_element:
         if element.image:
-            os.system("powershell copy " + chemin_entree + "/" + element.contenu +
-                      " " + chemin_destination + "/site/images -erroraction 'silentlycontinue'")
-            element.contenu = "./site/images/" + os.path.basename(element.contenu)
+            copy(path.abspath(path.dirname(chemin_entree) + "/" + element.contenu), path.abspath(chemin_destination + "/site/images"))
+            element.contenu = "./images/" + path.basename(element.contenu)
     return
