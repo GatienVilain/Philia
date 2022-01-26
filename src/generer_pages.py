@@ -39,8 +39,8 @@ def generer_page_accueil(chemin_destination, liste_element):
         liste_element[0][0].contenu + "</title>\n</head>\n<body>\n<h1>" + \
         liste_element[0][0].contenu + "</h1>\n<ul>\n"
 
-    for index in range(2, len(liste_element)):
-        contenu_html += "\t<li><a href=" + liste_element[index][0].contenu.replace(
+    for index in range(1, len(liste_element)):
+        contenu_html += "\t<li><a href=\"" + liste_element[index][0].contenu.replace(
             " ", "_") + ".html\">" + liste_element[index][0].contenu + "</a></li>\n"
 
     contenu_html += "\n</body>\n</html>"
@@ -53,11 +53,12 @@ def generer_page_accueil(chemin_destination, liste_element):
 
 def generer_pages(chemin_entree, chemin_destination):
     fichier_entree = extraction_texte(chemin_entree)
+    print(chemin_entree + "\n" + chemin_destination)
 
-    if not os.path.exists(chemin_destination + "site"):
-        os.mkdir(chemin_destination + "site")
-        os.mkdir(chemin_destination + "site/css")
-        os.mkdir(chemin_destination + "site/images")
+    if not os.path.exists(chemin_destination + "/site"):
+        os.mkdir(chemin_destination + "/site")
+        os.mkdir(chemin_destination + "/site/css")
+        os.mkdir(chemin_destination + "/site/images")
 
     copie_images(chemin_entree, chemin_destination, fichier_entree)
 
@@ -73,4 +74,4 @@ def generer_pages(chemin_entree, chemin_destination):
 # ---- TEST -------
 if __name__ == '__main__':
     generer_pages(
-        r"C:\Users\gatie\source\repos\GatienVilain\projet-info\TEST.mm", "./")
+        r"C:/Users/gatie/Bureau/TEST.mm", "C:/Users/gatie/Bureau")

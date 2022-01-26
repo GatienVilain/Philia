@@ -69,25 +69,29 @@ def detection_titre(L):
     return(L_triee)
 
 
+def creer_liste_tampon(L, i):
+    L_tampon = []
+    L_tampon.append(L[i])
+    Bool = False
+    if i+1 < len(L)-1:
+        i = i+1
+        while L[i].titre == False and i < len(L)-1:
+            if Bool == False:
+                Bool = True
+            L_tampon.append(L[i])
+            i = i+1
+        if Bool and i == len(L)-1:
+            L_tampon.append(L[i])
+    return (L_tampon, i+1)
+
+
 def decoupage(L):
     i = 0
     L_dec = []
-
-    while i < (len(L)-1):
-        Ltampon = []
-        if L[i].titre == True and i < len(L)-1:
-            Ltampon.append(L[i])
-            i = i+1
-            while L[i].titre == False and i < len(L)-1:
-                Ltampon.append(L[i])
-                i = i+1
-
-        else:
-
-            i = i+1
-        Ltampon.append(L[-1])
-        L_dec.append(Ltampon)
-
+    while i < len(L):
+        Lt = []
+        Lt, i = creer_liste_tampon(L, i)
+        L_dec.append(Lt)
     return(L_dec)
 
 
