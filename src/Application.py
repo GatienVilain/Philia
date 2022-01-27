@@ -2,15 +2,17 @@ from tkinter import*  # Pour l'interface graphique
 import tkinter.filedialog as FD  # Utilisé pour les chemins des fichiers et dossiers
 import tkinter.ttk as ttk  # Pour avoir plus d'options sur les widgets
 
-from webbrowser import open # Pour ouvrir un page web
+from webbrowser import open  # Pour ouvrir un page web
 from pathlib import Path  # Pour récupérer l'adresse du dossier download
 from os import startfile
 
 # Pour importer le programme servant à générer le site web
+from programmes.generer_pages import *
 from programmes.objet import *
 
-
 # Début class PathEntry
+
+
 class PathEntry (ttk.Frame):
 
     # Début def
@@ -164,17 +166,17 @@ def afficher(widget):
 # Début def
 
 # Fonction qui vérifie que le fichier MindMap entré par l'utilisateur est correct
-def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap):
+def verificationFichierMindMap(cadreInitial, cadreChoixMode, boutonGenerer, labelErreur, adresseMindMap):
 
     if(adresseMindMap[-3:] == ".mm"):  # On vérifie qu'il s'agit d'un fichier MindMap
         # On change le style du boutonGenerer pour passer en mode 'Normal'
         boutonGenerer['style'] = 'BoutonNormal.TButton'
         dissimuler(labelErreur)  # On cache le label erreur
         dissimuler(cadreInitial)  # On cache le cadre initial
-        afficher(cadreFinal)  # On affiche le cadre final
-        # On appelle la fonction genererSite
-        genererSite(cadreInitial, cadreFinal,
-                    adresseMindMap, folderEntry.get_path())
+        # afficher(cadreFinal) #On affiche le cadre final
+        cadreInitial.master.geometry("200x60")
+        afficher(cadreChoixMode)
+        # genererSite(cadreInitial, cadreFinal, adresseMindMap, folderEntry.get_path()) #On appelle la fonction genererSite
 
     else:
         # En cas de fichier incorrect on passe le bouton en mode 'Erreur'
@@ -186,13 +188,26 @@ def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErr
 
 # Début def
 
-# La fonction démarre la génération du site
-def genererSite(cadreInitial, cadreFinal, adresseMindMap, adresseSite):
+# La fonction démarre la génération du site en mode Objet
+def genererSiteObjets(adresseMindMap, adresseSite):
 
     if adresseSite == "":  # Si l'utilisateur n'a pas entré d'adresse de stockage, on charge une adresse par défaut
         adresseSite = str(Path.home() / "Downloads")
 
-    # On démarre la création du site à l'adresse souhaitée
+    # On démarre la création du site à l'adresse souhaitée avec le programme objet
+    generer_pages_objets(adresseMindMap, adresseSite)
+# Fin def
+
+
+# Début def
+
+# La fonction démarre la génération du site avec le mode Liste
+def genererSiteListes(adresseMindMap, adresseSite):
+
+    if adresseSite == "": 
+        adresseSite = str(Path.home() / "Downloads")
+
+    # On démarre la création du site avec le programme sans objet
     generer_pages(adresseMindMap, adresseSite)
 # Fin def
 
@@ -210,7 +225,7 @@ def ouvrirSite(adresse):
 
 
 # Début def
-def creerCadreInitial(cadreInitial, cadreFinal):
+def creerCadreInitial(cadreInitial, cadreFinal, cadreChoixMode):
 
     ########### Création et initialisation des différents styles pour les widgets ###########
 
@@ -274,7 +289,7 @@ def creerCadreInitial(cadreInitial, cadreFinal):
                                style='BoutonNormal.TButton',
 
                                # Commande exécutée quand on clique sur le bouton
-                               command=lambda: verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer,
+                               command=lambda: verificationFichierMindMap(cadreInitial, cadreChoixMode, boutonGenerer,
                                                                           labelErreur, fileEntry.get_path())
 
                                )
@@ -358,7 +373,7 @@ def creerCadreFinal(cadreFinal, cadreInitial):
     # Création du bouton Redemarer
     boutonRedemarer = ttk.Button(cadreBas,
 
-                                 text='Redémarer',  # Texte affiché sur le bouton
+                                 text='Redémarrer',  # Texte affiché sur le bouton
 
                                  style="Bouton.TButton",  # Style du bouton défini
 
@@ -370,7 +385,7 @@ def creerCadreFinal(cadreFinal, cadreInitial):
 
                                 style="Bouton.TButton",  # Style du bouton défini
 
-                                command=lambda: [startfile(fileEntry.get_path()), afficher(cadreInitial), dissimuler(cadreFinal)])  # Commande exécutée quand on clique sur le bouton
+                                command=lambda: [os.startfile(fileEntry.get_path()), afficher(cadreInitial), dissimuler(cadreFinal)])  # Commande exécutée quand on clique sur le bouton
 
     ########### Fin création des widgets ###########
 
@@ -392,6 +407,56 @@ def creerCadreFinal(cadreFinal, cadreInitial):
 
 
 # Début def
+def creerCadreChoixMode(cadreInitial, cadreFinal, cadreChoixMode):
+
+    ########### Création et initialisation des différents styles pour les widgets ###########
+
+    styleBouton = ttk.Style()
+    styleBouton.configure('Bouton.TButton',
+
+                          font=('calibri', 12, 'bold'),
+
+                          foreground='BLACK',
+
+                          width=10,
+                          )
+
+    ########### Fin de la création et initialisation du style des widgets ###########
+
+
+    ########### Création des widgets composant le cadre initial ###########
+
+    boutonModeObjet = ttk.Button(cadreChoixMode,
+
+                                 text='Objet',  # Texte affiché sur le bouton
+
+                                 style="Bouton.TButton",  # Style du bouton défini
+
+                                 command=lambda: [genererSiteObjets(fileEntry.get_path(), folderEntry.get_path()), afficher(cadreFinal), dissimuler(cadreChoixMode), cadreInitial.master.geometry("400x200")])  # Commande exécutée quand on clique sur le bouton
+
+    boutonModeNormal = ttk.Button(cadreChoixMode,
+
+                                  text='Liste',  # Texte affiché sur le bouton
+
+                                  style="Bouton.TButton",  # Style du bouton défini
+
+                                  command=lambda: [genererSiteListes(fileEntry.get_path(), folderEntry.get_path()), afficher(cadreFinal), dissimuler(cadreChoixMode), cadreInitial.master.geometry("400x200")])  # Commande exécutée quand on clique sur le bouton
+
+    ########### Fin création des widgets ###########
+
+
+    ########### Affichage des widgets dans le cadre initial ###########
+
+    boutonModeNormal.pack(side=TOP) #On affiche le boutonModeNormal dans la frame cadreChoixMode
+    boutonModeObjet.pack(side=BOTTOM)
+
+    ########### Fin affichage ###########
+
+# Fin def
+
+
+# Début def
+
 def creerApplication(titreApplication):
 
     ########### Création fenêtre application ###########
@@ -408,8 +473,10 @@ def creerApplication(titreApplication):
 
     cadreFinal = ttk.Frame(window)  # Création d'un objet Frale
     cadreInitial = ttk.Frame(window)
+    cadreChoixMode = ttk.Frame(window)
+    creerCadreChoixMode(cadreInitial, cadreFinal, cadreChoixMode)
     # Création du cadre initial et récupération de l'adresse du site Web
-    creerCadreInitial(cadreInitial, cadreFinal)
+    creerCadreInitial(cadreInitial, cadreFinal, cadreChoixMode)
     creerCadreFinal(cadreFinal, cadreInitial)
     afficher(cadreInitial)  # Affichage du cadre initial
 

@@ -127,11 +127,12 @@ class Bloc():
                 self.image = node.find('richcontent').find(
                     'html').find('body').find('img').attrib['src']
             except:
-                print("Veuillez ne pas mettre de texte sous les images")
+                self.image = node.find('richcontent').find(
+                    'html').find('body').find('p').find('img').attrib['src']
 
     def generer(self, contenu_html, chemin_entree, chemin_destination):
         if self.image != '':
-            copy(path.abspath(path.dirname(chemin_entree) + "/" + self.image),
+            copy(path.abspath(path.dirname(chemin_entree) + "/./" + self.image),
                  path.abspath(chemin_destination + "/site/images"))
             self.image = "./images/" + path.basename(self.image)
             contenu_html += "<center><img id=\"" + path.basename(self.image).replace(
@@ -141,7 +142,7 @@ class Bloc():
         return contenu_html
 
 
-def generer_pages(chemin_entree, chemin_destination):
+def generer_pages_objets(chemin_entree, chemin_destination):
     if not path.exists(chemin_destination + "/site"):
         mkdir(chemin_destination + "/site")
         mkdir(chemin_destination + "/site/css")
