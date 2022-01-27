@@ -3,15 +3,18 @@ from os import path, mkdir
 from shutil import copy
 
 
+# Définition de la classe Map (plus grand père du fichier xml)
 class Map():
     def __init__(self, node):
-        self.information = node
+        self.information = node          # Intérieur du noeud du fichier xml
         self.description = ''
-        self.pere = None
-        self.fils = []
-        for node_fils in node.findall('node'):
+        self.pere = None                # Père du node
+        self.fils = []                  # Liste des fils du node
+        for node_fils in node.findall('node'):          # Création des fils
+            # Condition pour ne pas boucler infiniment
             if node_fils.attrib['CREATED'] != '':
                 item_fils = Titre(node_fils)
+                # Ajout du fils dans la liste
                 self.fils.append(item_fils)
                 item_fils.pere = node
 
@@ -24,11 +27,12 @@ class Map():
 
 class Titre():
     def __init__(self, node):
-        self.information = node
+        self.information = node                 # Intérieur du noeud du fichier xml
+        # Information importante contenue dans le fichier (titre ici)
         self.titre = node.attrib['TEXT']
-        self.fils = []
+        self.fils = []                          # Fils
         self.pere = ''
-        for node_fils in node.findall('node'):
+        for node_fils in node.findall('node'):      # Créations des fils
             if node_fils.attrib['CREATED'] != '':
                 item_fils = Page(node_fils)
                 self.fils.append(item_fils)
@@ -58,6 +62,7 @@ class Titre():
 
 class Page():
     def __init__(self, node):
+        # Information importante contenue dans le noeud (titre de la page ici)
         self.page = node.attrib['TEXT']
         self.information = node
         self.pere = ''
@@ -85,6 +90,7 @@ class Page():
 
 class Sous_titre():
     def __init__(self, node):
+        # Information importante contenue dans le noeud (sous_titre de la page ici)
         self.sous_titre = node.attrib['TEXT']
         self.information = node
         self.pere = ''
@@ -110,7 +116,9 @@ class Sous_titre():
 
 class Bloc():
     def __init__(self, node):
+        # Information importante contenue dans le noeud (bloc_txt de la page ici)
         self.bloc = ''
+        # Information importante contenue dans le noeud (chemin de l'image ici)
         self.image = ''
         self.information = node
         self.pere = ''
@@ -120,13 +128,13 @@ class Bloc():
                 item_fils = Bloc(node_fils)
                 self.fils.append(item_fils)
                 item_fils.pere = self
-        try:
+        try:                                        # Si y'a pas d'image
             self.bloc = node.attrib['TEXT']
-        except:
+        except:                                     # Si y'a une image
             try:
                 self.image = node.find('richcontent').find(
                     'html').find('body').find('img').attrib['src']
-            except:
+            except:                                             # Avec un texte
                 self.image = node.find('richcontent').find(
                     'html').find('body').find('p').find('img').attrib['src']
 
