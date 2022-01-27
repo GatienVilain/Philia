@@ -385,7 +385,7 @@ def creerCadreFinal(cadreFinal, cadreInitial):
 
                                 style="Bouton.TButton",  # Style du bouton défini
 
-                                command=lambda: [os.startfile(fileEntry.get_path()), afficher(cadreInitial), dissimuler(cadreFinal)])  # Commande exécutée quand on clique sur le bouton
+                                command=lambda: [startfile(fileEntry.get_path()), afficher(cadreInitial), dissimuler(cadreFinal)])  # Commande exécutée quand on clique sur le bouton
 
     ########### Fin création des widgets ###########
 

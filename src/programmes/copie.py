@@ -20,8 +20,8 @@ def copie_images(chemin_entree, chemin_destination, liste_element):
         if element.image:
             try:
                 copy(path.abspath(path.dirname(chemin_entree) + "/" + element.contenu),
-                     path.abspath(chemin_destination + "/site/images"))
-                element.contenu = "./images/" + path.basename(element.contenu)
+                     path.abspath(chemin_destination + "/site/images/" + path.basename(element.contenu).replace(" ", "_")))
+                element.contenu = "./images/" + path.basename(element.contenu).replace(" ", "_")
             except:
                 pass
     return

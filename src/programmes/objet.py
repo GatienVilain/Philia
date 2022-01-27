@@ -81,7 +81,7 @@ class Page():
             contenu_html = sous_titre.generer(
                 contenu_html, chemin_entree, chemin_destination)
 
-        contenu_html += "<p id=\"to_top\"><a href=\"#top\">▲</p>\n</body>\n</html>"
+        contenu_html += "\n\t<div id=\"myModal\" class=\"modal\">\n\t\t<span class=\"close\">&times;</span>\n\t\t<img class=\"modal-content\" id=\"img01\">\n\t\t<div id=\"caption\"></div>\n\t</div>\n\t<script>\n\t\tfunction agrandir(id_item) {\n\t\t\tvar modal = document.getElementById(\"myModal\");\n\t\t\tvar img = document.getElementById(id_item);\n\t\t\tvar modalImg = document.getElementById(\"img01\");\n\t\t\tvar captionText = document.getElementById(\"caption\");\n\n\t\t\timg.onclick = function() {\n\t\t\t\tmodal.style.display = \"block\";\n\t\t\t\tmodalImg.src = this.src;\n\t\t\t\tcaptionText.innerHTML = this.alt;\n\t\t\t}\n\n\t\t\tvar span = document.getElementsByClassName(\"close\")[0];\n\n\t\t\tspan.onclick = function() {\n\t\t\t\tmodal.style.display = \"none\";\n\t\t\t}\n\t\t}\n\t</script>\n\t<p id=\"to_top\"><a href=\"#top\">▲</p>\n</body>\n</html>"
         f = open(chemin_destination + "/site/" +
                  self.page.replace(" ", "_") + '.html', 'w', encoding='utf8')
         f.write(contenu_html)
@@ -103,7 +103,7 @@ class Sous_titre():
 
     def generer(self, contenu_html, chemin_entree, chemin_destination):
         contenu_html += "<section id=\"" + self.sous_titre + "\">\n\t<h3 id=\"" + \
-            self.sous_titre.replace(" ", "-") + "\">" + \
+            self.sous_titre.replace(" ", "_") + "\">" + \
             self.sous_titre + "</h3>\n\t"
 
         for bloc in self.fils:
@@ -141,10 +141,11 @@ class Bloc():
     def generer(self, contenu_html, chemin_entree, chemin_destination):
         if self.image != '':
             copy(path.abspath(path.dirname(chemin_entree) + "/./" + self.image),
-                 path.abspath(chemin_destination + "/site/images"))
-            self.image = "./images/" + path.basename(self.image)
-            contenu_html += "<center><img id=\"" + path.basename(self.image).replace(
-                " ", "-") + "\" src=\"" + self.image + "\" style = \"width:30%\"></center>"
+                 path.abspath(chemin_destination + "/site/images/" + path.basename(self.image).replace(" ", "_")))
+            self.image = "./images/" + path.basename(self.image).replace(" ", "_")
+            contenu_html += "<center><a href=\"javascript:agrandir(\'" + path.basename(self.image).replace(
+                " ", "_") + "\')\"><img id=\"" + path.basename(self.image).replace(
+                " ", "_") + "\" src=\"" + self.image + "\" style = \"width:30%\"></a></center>"
         if self.bloc != '':
             contenu_html += "<p>" + self.bloc + "</p>"
         return contenu_html

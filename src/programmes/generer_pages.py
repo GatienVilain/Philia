@@ -1,5 +1,5 @@
-import os
-from programmes.extraction_mind_map import *
+from os import path, mkdir
+from programmes.extraction_mind_map import extraction_texte, decoupage
 from programmes.copie import *
 
 
@@ -16,16 +16,20 @@ def generer_page(chemin_destination, liste_element):
                 if section_ouvert:
                     contenu_html += "\n</section>"
                 contenu_html += "<section id=\"" + element.contenu + \
-                    "\">\n\t<h3 id=\"" + element.contenu.replace(" ", "-") + "\">" + element.contenu + "</h3>\n\t"
+                    "\">\n\t<h3 id=\"" + \
+                    element.contenu.replace(
+                        " ", "_") + "\">" + element.contenu + "</h3>\n\t"
                 section_ouvert = True
             elif element.image:
-                contenu_html += "<center><img id=\"" + os.path.basename(element.contenu).replace(" ", "-") + "\" src=\"" + element.contenu + "\" style = \"width:30%\"></center>"
+                contenu_html += "<center><a href=\"javascript:agrandir(\'" + path.basename(element.contenu).replace(
+                    " ", "_") + "\')\"><img id=\"" + path.basename(element.contenu).replace(
+                    " ", "_") + "\" src=\"" + element.contenu + "\" style = \"width:30%\"></a></center>"
             else:
                 contenu_html += "<p>" + element.contenu + "</p>"
         if section_ouvert:
             contenu_html += "\n</section>"
 
-    contenu_html += "<p id=\"to_top\"><a href=\"#top\">▲</p>\n</body>\n</html>"
+    contenu_html += "\n\t<div id=\"myModal\" class=\"modal\">\n\t\t<span class=\"close\">&times;</span>\n\t\t<img class=\"modal-content\" id=\"img01\">\n\t\t<div id=\"caption\"></div>\n\t</div>\n\t<script>\n\t\tfunction agrandir(id_item) {\n\t\t\tvar modal = document.getElementById(\"myModal\");\n\t\t\tvar img = document.getElementById(id_item);\n\t\t\tvar modalImg = document.getElementById(\"img01\");\n\t\t\tvar captionText = document.getElementById(\"caption\");\n\n\t\t\timg.onclick = function() {\n\t\t\t\tmodal.style.display = \"block\";\n\t\t\t\tmodalImg.src = this.src;\n\t\t\t\tcaptionText.innerHTML = this.alt;\n\t\t\t}\n\n\t\t\tvar span = document.getElementsByClassName(\"close\")[0];\n\n\t\t\tspan.onclick = function() {\n\t\t\t\tmodal.style.display = \"none\";\n\t\t\t}\n\t\t}\n\t</script>\n\t<p id=\"to_top\"><a href=\"#top\">▲</p>\n</body>\n</html>"
     f = open(chemin_destination + "/site/" +
              liste_element[0].contenu.replace(" ", "_") + '.html', 'w', encoding='utf8')
     f.write(contenu_html)
@@ -60,10 +64,10 @@ def generer_page_accueil(chemin_destination, liste_element):
 def generer_pages_liste(chemin_entree, chemin_destination):
     fichier_entree = extraction_texte(chemin_entree)
 
-    if not os.path.exists(chemin_destination + "/site"):
-        os.mkdir(chemin_destination + "/site")
-        os.mkdir(chemin_destination + "/site/css")
-        os.mkdir(chemin_destination + "/site/images")
+    if not path.exists(chemin_destination + "/site"):
+        mkdir(chemin_destination + "/site")
+        mkdir(chemin_destination + "/site/css")
+        mkdir(chemin_destination + "/site/images")
 
     copie_css(chemin_destination)
     copie_images(chemin_entree, chemin_destination, fichier_entree)
