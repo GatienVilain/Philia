@@ -6,7 +6,7 @@ import webbrowser  # Pour ouvrir un page web
 from pathlib import Path  # Pour récupérer l'adresse du dossier download
 
 # Pour importer le programme servant à générer le site web
-from programmes.generer_pages import *
+from programmes.objet import *
 
 
 # Début class PathEntry
@@ -163,7 +163,7 @@ def afficher(widget):
 # Début def
 
 # Fonction qui vérifie que le fichier MindMap entré par l'utilisateur est correct
-def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap):
+def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap, folderEntry):
 
     if(adresseMindMap[-3:] == ".mm"):  # On vérifie qu'il s'agit d'un fichier MindMap
         # On change le style du boutonGenerer pour passer en mode 'Normal'
@@ -273,7 +273,7 @@ def creerCadreInitial(cadreInitial, cadreFinal):
 
                                # Commande exécutée quand on clique sur le bouton
                                command=lambda: verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer,
-                                                                          labelErreur, fileEntry.get_path())
+                                                                          labelErreur, fileEntry.get_path(), folderEntry)
 
                                )
 
