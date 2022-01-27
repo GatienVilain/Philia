@@ -2,8 +2,9 @@ from tkinter import*  # Pour l'interface graphique
 import tkinter.filedialog as FD  # Utilisé pour les chemins des fichiers et dossiers
 import tkinter.ttk as ttk  # Pour avoir plus d'options sur les widgets
 
-import webbrowser  # Pour ouvrir un page web
+from webbrowser import open # Pour ouvrir un page web
 from pathlib import Path  # Pour récupérer l'adresse du dossier download
+from os import startfile
 
 # Pour importer le programme servant à générer le site web
 from programmes.objet import *
@@ -13,7 +14,7 @@ from programmes.objet import *
 class PathEntry (ttk.Frame):
 
     # Début def
-    def __init__(self, master=None, texteLabel="Defaut"):  # Initialisation de l'ob
+    def __init__(self, master=None, texteLabel="Defaut"):  # Initialisation de l'objet PathEntry
 
         self.master = master
         self.texteLabel = texteLabel
@@ -163,7 +164,7 @@ def afficher(widget):
 # Début def
 
 # Fonction qui vérifie que le fichier MindMap entré par l'utilisateur est correct
-def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap, folderEntry):
+def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap):
 
     if(adresseMindMap[-3:] == ".mm"):  # On vérifie qu'il s'agit d'un fichier MindMap
         # On change le style du boutonGenerer pour passer en mode 'Normal'
@@ -204,7 +205,7 @@ def ouvrirSite(adresse):
         adresse = str(Path.home() / "Downloads")
 
     adresse = adresse + "/site/index.html"
-    webbrowser.open("file:///" + adresse)  # Ouverture du site web
+    open("file:///" + adresse)  # Ouverture du site web
 # Fin def
 
 
@@ -257,11 +258,12 @@ def creerCadreInitial(cadreInitial, cadreFinal):
 
     cadreBouton = ttk.Frame(cadreInitial, width=80, height=30)
 
+    global fileEntry
     # Création objet FileEntry
     fileEntry = FileEntry(cadreInitial, texteLabel="Fichier .mm :")
 
-    # Création objet FolderEntry
     global folderEntry
+    # Création objet FolderEntry
     folderEntry = FolderEntry(cadreInitial, texteLabel="Enregistrer    :")
 
     # Création d'un bouton
@@ -273,7 +275,7 @@ def creerCadreInitial(cadreInitial, cadreFinal):
 
                                # Commande exécutée quand on clique sur le bouton
                                command=lambda: verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer,
-                                                                          labelErreur, fileEntry.get_path(), folderEntry)
+                                                                          labelErreur, fileEntry.get_path())
 
                                )
 
@@ -362,6 +364,14 @@ def creerCadreFinal(cadreFinal, cadreInitial):
 
                                  command=lambda: [dissimuler(cadreFinal), afficher(cadreInitial)])  # Commande exécutée quand on clique sur le bouton
 
+    boutonModifier = ttk.Button(cadreBas,
+
+                                text='Modifier',  # Texte affiché sur le bouton
+
+                                style="Bouton.TButton",  # Style du bouton défini
+
+                                command=lambda: [startfile(fileEntry.get_path()), afficher(cadreInitial), dissimuler(cadreFinal)])  # Commande exécutée quand on clique sur le bouton
+
     ########### Fin création des widgets ###########
 
     ########### Affichage des widgets dans le cadre initial ###########
@@ -374,6 +384,7 @@ def creerCadreFinal(cadreFinal, cadreInitial):
     canvas.place(x=175, y=65)
     boutonVisualiser.place(x=280, y=20)
     boutonRedemarer.place(x=30, y=20)
+    boutonModifier.place(x=156, y=20)
 
     ########### Fin affichage ###########
 
@@ -407,4 +418,4 @@ def creerApplication(titreApplication):
 # Fin def
 
 
-creerApplication('Générateur de site web')  # Création de l'application
+creerApplication('Philia')  # Création de l'application
