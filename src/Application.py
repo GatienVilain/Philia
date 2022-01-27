@@ -1,343 +1,410 @@
-from tkinter import*
-import tkinter.filedialog as FD
-import tkinter.messagebox as MB
-import webbrowser
-import os
-from pathlib import Path
+from tkinter import*  # Pour l'interface graphique
+import tkinter.filedialog as FD  # Utilisé pour les chemins des fichiers et dossiers
+import tkinter.ttk as ttk  # Pour avoir plus d'options sur les widgets
 
-import tkinter.ttk as ttk
+import webbrowser  # Pour ouvrir un page web
+from pathlib import Path  # Pour récupérer l'adresse du dossier download
+
+# Pour importer le programme servant à générer le site web
 from programmes.generer_pages import *
 
 
-class FileEntry (ttk.Frame):
+# Début class PathEntry
+class PathEntry (ttk.Frame):
 
-    def __init__(self, master=None, nameButton="Parcourir", **kw):
+    # Début def
+    def __init__(self, master=None, texteLabel="Defaut"):  # Initialisation de l'ob
 
         self.master = master
-        self.nameButton = nameButton
-        self.kw = kw
+        self.texteLabel = texteLabel
 
-        # super class inits
+        # Initialisation de l'objet Frame
         ttk.Frame.__init__(self, master)
 
-        # widget inits
+        # Initialisation des widgets
 
-        self.init_widget(nameButton, **kw)
+        self.init_widget(texteLabel)
 
-    # end def
+    # Fin def
 
-    def init_widget(self, nameButton, **kw):
+    # Début def
+    def init_widget(self, texteLabel):  # Initialisation des widgets
 
         # component inits
 
+        # Création d'un objet Label
         self.label = ttk.Label(
 
             self,
 
-            text=kw.get(
-
-                "label",
-
-                "Veuillez sélectionner un fichier, SVP:"
-            )
+            text=texteLabel
 
         )
 
+        # Création d'une variable StrinVar
         self.file_path = StringVar()
 
+        # Création d'un objet Entry
         self.entry = Entry(
 
             self,
 
             textvariable=self.file_path,
 
+            # On désactive entry (on ne peut plus écrire dedans)
             state=DISABLED,
 
-            disabledbackground="WHITE",
+            disabledbackground="WHITE",  # Couleur du fond quand entry est désactivé
 
-            disabledforeground='BLACK'
+            disabledforeground='BLACK'  # Couleur du texte quand entry est désactivé
 
         )
 
-        self.button = ttk.Button(
-
-            self,
-
-            text=nameButton,
-
-            command=self.slot_browse,
-
-            underline=0,
-        )
-
-        # layout inits
-
-        self.label.pack(side=LEFT, expand=0, fill=X)
-
-        self.entry.pack(side=LEFT, expand=1, fill=X)
-
-        self.button.pack(side=LEFT, expand=0, fill=NONE, padx=5)
-
-    # end def
-
-    def get_path(self):
-
-        return self.file_path.get()
-
-    # end def
-
-    def slot_browse(self, tk_event=None, *args, **kw):
-
-        # browse file path
-
-        fpath = FD.askopenfilename(
-            filetypes=[("Fichier mind map", ".mm"), ("All types", ".*")])
-        # set entry's contents with file_path control variable
-
-        self.file_path.set(fpath)
-
-    # end def
-
-    def get_path(self):
-
-        return self.file_path.get()
-
-    # end def
-
-# end class FileEntry
-
-
-class FolderEntry (ttk.Frame):
-
-    def __init__(self, master=None, **kw):
-
-        # super class inits
-
-        ttk.Frame.__init__(self, master)
-
-        # widget inits
-
-        self.init_widget(**kw)
-
-    # end def
-
-    def init_widget(self, **kw):
-
-        # component inits
-
-        self.label = ttk.Label(
-
-            self,
-
-            text=kw.get(
-
-                "label",
-
-                "Veuillez sélectionner un dossier, SVP:"
-            )
-        )
-
-        self.file_path = StringVar()
-
-        self.entry = Entry(
-
-            self,
-
-            textvariable=self.file_path,
-
-            state=DISABLED,
-
-            disabledbackground="WHITE",
-
-            disabledforeground='BLACK'
-        )
-
-        self.button = ttk.Button(
+        # Création d'un bouton
+        self.boutonParcourir = ttk.Button(
 
             self,
 
             text="Parcourir",
 
-            command=self.slot_browse,
+            command=self.slot_browse,  # Commande exécutée quand on appuie sur le bouton
 
-            underline=0,
+            underline=0
+
         )
 
-        # layout inits
+        # On initialise la position des widgets de l'objet PathEntry
 
-        self.label.pack(side=LEFT, expand=0, fill=X, padx=4)
+        self.label.pack(side=LEFT, expand=0, fill=X)
 
         self.entry.pack(side=LEFT, expand=1, fill=X)
 
-        self.button.pack(side=LEFT, expand=0, fill=NONE, padx=5)
+        self.boutonParcourir.pack(side=LEFT, expand=0, fill=NONE, padx=5)
 
-    # end def
+    # Fin def
 
-    def slot_browse(self, tk_event=None, *args, **kw):
-
-        # browse file path
-
-        fpath = FD.askdirectory(title="Répertoire de travail")
-
-        # set entry's contents with file_path control variable
-
-        self.file_path.set(fpath)
-
-    # end def
+    # Début def
 
     def get_path(self):
 
-        return self.file_path.get()
+        return self.file_path.get()  # On récupère la valeur de l'attribut file_path
 
-    # end def
+    # Fin def
 
-# end class FolderOutput
+    # Début def
 
+    def set_path(self, path):
+        # On modfie le contenu de l'attribut file_path par path
+        self.file_path.set(path)
 
-def forget(widget):
+    # Fin def
 
-    # This will remove the widget from toplevel
-    # basically widget do not get deleted
-    # it just becomes invisible and loses its position
-    # and can be retrieve
-    widget.forget()
-
-
-def retrieve(widget):
-    widget.pack()
+# Fin class PathEntry
 
 
-def verificationFichier(adresse, cadreInitial, cadreFinal, boutonGenerer, labelErreur):
-    if(adresse[-3:] == ".mm"):
-        boutonGenerer['style'] = 'W2.TButton'
-        forget(labelErreur)
-        generer(cadreInitial, cadreFinal)
+# Début class FileEntry
+class FileEntry(PathEntry):  # La class FileEntry hérite de la class PathEntry
+
+    def __init__(self, master=None, texteLabel=""):  # On initialise l'objet FileEntry
+        PathEntry.__init__(self, master, texteLabel)
+
+    def slot_browse(self):
+
+        # On parcourt les fichiers et on récupère l'adresse du fichier voulu
+        fpath = FD.askopenfilename(
+            filetypes=[("Fichier mind map", ".mm"), ("All types", ".*")])  # On autorise différents types de fichiers
+
+        # On met à jour l'adresse du fichier
+        self.set_path(fpath)
+
+    # Fin def
+
+# Fin class FileEntry
+
+
+# Début class FolderEntry
+class FolderEntry(PathEntry):  # La class FolderEntry hérite de la class PathEntry
+
+    # Début def
+    def __init__(self, master=None, texteLabel=""):  # On initialise l'objet FolderEntry
+        PathEntry.__init__(self, master, texteLabel)
+    # Fin def
+
+    # Début def
+    def slot_browse(self):
+
+        # On parcourt les dossier et on récupère l'adresse du dossier voulu
+        fpath = FD.askdirectory(title="Répertoire de travail")
+
+        # On met à jour l'adresse du dossier
+        self.set_path(fpath)
+
+    # Fin def
+
+# Fin class FolderEntry
+
+
+# Début def
+
+# Fonction qui cache le widget passé en paramètre
+def dissimuler(widget):
+    widget.forget()  # On cache le widget
+# Fin def
+
+
+# Début def
+
+# Fonction qui affiche le widget passé en paramètre
+def afficher(widget):
+    widget.pack()  # Affichage du widget
+# Fin def
+
+
+# Début def
+
+# Fonction qui vérifie que le fichier MindMap entré par l'utilisateur est correct
+def verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer, labelErreur, adresseMindMap):
+
+    if(adresseMindMap[-3:] == ".mm"):  # On vérifie qu'il s'agit d'un fichier MindMap
+        # On change le style du boutonGenerer pour passer en mode 'Normal'
+        boutonGenerer['style'] = 'BoutonNormal.TButton'
+        dissimuler(labelErreur)  # On cache le label erreur
+        dissimuler(cadreInitial)  # On cache le cadre initial
+        afficher(cadreFinal)  # On affiche le cadre final
+        # On appelle la fonction genererSite
+        genererSite(cadreInitial, cadreFinal,
+                    adresseMindMap, folderEntry.get_path())
 
     else:
-        boutonGenerer['style'] = 'W3.TButton'
+        # En cas de fichier incorrect on passe le bouton en mode 'Erreur'
+        boutonGenerer['style'] = 'BoutonErreur.TButton'
+        # On affiche le label erreur et on le positionne en dessous du bouton Generer
         labelErreur.pack(side=BOTTOM, fill=BOTH)
-        fileentry_sequence.entry.delete(0, END)
+# Fin def
 
 
-def generer(cadreInitial, cadreFinal):
-    forget(cadreInitial)
-    retrieve(cadreFinal)
-    adresseMindMap = fileentry_sequence.get_path()
-    adresseSite = folderentry_sequence.get_path()
+# Début def
 
-    if adresseSite == "":
+# La fonction démarre la génération du site
+def genererSite(cadreInitial, cadreFinal, adresseMindMap, adresseSite):
+
+    if adresseSite == "":  # Si l'utilisateur n'a pas entré d'adresse de stockage, on charge une adresse par défaut
         adresseSite = str(Path.home() / "Downloads")
 
-    # Rajouter appel fonction pour générer le site
+    # On démarre la création du site à l'adresse souhaitée
     generer_pages(adresseMindMap, adresseSite)
+# Fin def
 
 
-def affichageEcranInit(cadreInitial, cadreFinal, styleButton):
-    styleFrame1 = ttk.Style()
-    styleFrame1.configure('frame1.TFrame', background='ivory')
-    styleFrame2 = ttk.Style()
-    styleFrame2.configure('frame2.TFrame', background='red')
-    cadreInitial.pack()
-    frame1 = ttk.Frame(cadreInitial, width=400,
-                       height=130, style='frame1.TFrame')
-    frame1.pack(side=TOP, fill=BOTH)
-    frame2 = ttk.Frame(cadreInitial, width=400, height=70)
-    frame2.pack(side=BOTTOM)
-    frame3 = ttk.Frame(cadreInitial, width=80,
-                       height=30, style='frame2.TFrame')
-    frame3.place(x=125, y=138)
+# Début def
 
-    global fileentry_sequence
-    fileentry_sequence = FileEntry(cadreInitial, label="Fichier .mm :")
-    fileentry_sequence.place(x=55, y=30)
-    global folderentry_sequence
-    folderentry_sequence = FolderEntry(cadreInitial, label="Enregistrer :")
-    folderentry_sequence.place(x=55, y=70)
-    styleBoutonErreur = ttk.Style()
-    styleBoutonErreur.configure('W3.TButton', font=('calibri', 15, 'bold'),
-                                foreground='RED', width=14)
-
-    boutonGenerer = ttk.Button(frame3, text='Générer', style='W2.TButton', command=lambda: verificationFichier(
-        fileentry_sequence.get_path(), cadreInitial, cadreFinal, boutonGenerer, label))
-    boutonGenerer.pack(fill=BOTH)
-
-    styleLabel = ttk.Style()
-    styleLabel.configure('label.TLabel', font=(
-        'calibri', 12, 'bold'), relief=FLAT)
-    label = ttk.Label(frame3, text="Fichier .mm incorrect",
-                      style='label.TLabel')
-
-
+# La fonction permet d'ouvrir le site Web
 def ouvrirSite(adresse):
-    if(adresse == ""):
+    if(adresse == ""):  # Si l'utilisateur n'a pas entré d'adresse de stockage, on charge l'adresse par défaut
         adresse = str(Path.home() / "Downloads")
 
     adresse = adresse + "/site/index.html"
-    webbrowser.open("file:///" + adresse)
+    webbrowser.open("file:///" + adresse)  # Ouverture du site web
+# Fin def
 
 
-def affichageEcranFinal(cadreFinal, cadreInitial, styleButton):
-    cadreFinal.pack()
-    styleFrame1 = ttk.Style()
-    styleFrame1.configure('frame1.TFrame', background='ivory')
-    frame1 = ttk.Frame(cadreFinal, width=400,
-                       height=130, style='frame1.TFrame')
-    frame1.pack(side=TOP, fill=BOTH)
-    frame1.propagate(False)
+# Début def
+def creerCadreInitial(cadreInitial, cadreFinal):
 
-    frame2 = ttk.Frame(cadreFinal, width=400, height=70)
-    frame2.pack(side=BOTTOM)
+    ########### Création et initialisation des différents styles pour les widgets ###########
 
-    frame3 = ttk.Frame(frame2, width=80, height=30)
-    frame3.place(x=160, y=10)
-    styleLabel = ttk.Style()
-    styleLabel.configure('label.TLabel', font=(
-        'calibri', 12, 'bold'), relief=GROOVE)
-    label = ttk.Label(frame1, text="Site Web généré", style='label.TLabel')
+    styleCadreHaut = ttk.Style()  # Création d'un objet style pour la frame CadreHaut
+
+    # Configuration du style
+    styleCadreHaut.configure('cadreHaut.TFrame',
+
+                             background='ivory')
+
+    styleLabelErreur = ttk.Style()
+    styleLabelErreur.configure('labelErreur.TLabel',
+
+                               font=('calibri', 12, 'bold'),
+
+                               relief=FLAT)
+
+    styleBoutonErreur = ttk.Style()
+    styleBoutonErreur.configure('BoutonErreur.TButton',
+
+                                font=('calibri', 15, 'bold'),
+
+                                foreground='RED',
+
+                                width=14)
+
+    styleBoutonNormal = ttk.Style()
+    styleBoutonNormal.configure('BoutonNormal.TButton',
+
+                                font=('calibri', 15, 'bold'),
+
+                                foreground='BLACK',
+
+                                width=14)
+
+    ########### Fin de la création et initialisation du style des widgets ###########
+
+    ########### Création des widgets composant le cadre initial ###########
+
+    # Création d'une frame en définissant le maitre, la taille et le style
+    cadreHaut = ttk.Frame(cadreInitial, width=400,
+                          height=130, style='cadreHaut.TFrame')
+
+    cadreBas = ttk.Frame(cadreInitial, width=400, height=70)
+
+    cadreBouton = ttk.Frame(cadreInitial, width=80, height=30)
+
+    # Création objet FileEntry
+    fileEntry = FileEntry(cadreInitial, texteLabel="Fichier .mm :")
+
+    # Création objet FolderEntry
+    global folderEntry
+    folderEntry = FolderEntry(cadreInitial, texteLabel="Enregistrer    :")
+
+    # Création d'un bouton
+    boutonGenerer = ttk.Button(cadreBouton,
+
+                               text='Générer',
+
+                               style='BoutonNormal.TButton',
+
+                               # Commande exécutée quand on clique sur le bouton
+                               command=lambda: verificationFichierMindMap(cadreInitial, cadreFinal, boutonGenerer,
+                                                                          labelErreur, fileEntry.get_path())
+
+                               )
+
+    labelErreur = ttk.Label(cadreBouton, text="Fichier .mm incorrect",
+                            style='labelErreur.TLabel')  # Création d'un label
+
+    ########### Fin création des widgets ###########
+
+    ########### Affichage des widgets dans le cadre initial ###########
+
+    # On positionne le widget en haut du cadre initial et il doit remplir toute la place disponible
+    cadreHaut.pack(side=TOP, fill=BOTH)
+    cadreBas.pack(side=BOTTOM)
+    # On positionne le widget à une position précise
+    cadreBouton.place(x=125, y=138)
+    fileEntry.place(x=55, y=30)
+    folderEntry.place(x=55, y=70)
+    boutonGenerer.pack(fill=BOTH)
+
+    ########### Fin affichage ###########
+
+# Fin def
+
+
+# Début def
+def creerCadreFinal(cadreFinal, cadreInitial):
+
+    ########### Création et initialisation des différents styles pour les widgets ###########
+
+    styleCadreHaut = ttk.Style()
+    styleCadreHaut.configure('cadreHaut.TFrame',
+
+                             background='ivory')
+
+    styleLabel = ttk.Style()  # Création d'un objet style pour le label
+
+    # Configuration du style
+    styleLabel.configure('label.TLabel',
+
+                         font=('calibri', 12, 'bold'),
+
+                         relief=GROOVE)
+
+    styleBoutonsEcranFinal = ttk.Style()
+    styleBoutonsEcranFinal.configure('Bouton.TButton',
+
+                                     font=('calibri', 12, 'bold'),
+
+                                     foreground='BLACK',
+
+                                     width=10)
+
+    ########### Fin de la création et initialisation du style des widgets ###########
+
+    ########### Création des widgets composant le cadre initial ###########
+
+    cadreHaut = ttk.Frame(cadreFinal, width=400,
+                          height=130, style='cadreHaut.TFrame')
+
+    # Création d'une frame en définissant son maitre et sa taille
+    cadreBas = ttk.Frame(cadreFinal, width=400, height=70)
+
+    label = ttk.Label(cadreHaut, text="Site Web généré", style='label.TLabel')
+
+    # Chargement d'une image
+    imageValider = PhotoImage(file='./images/valider.png')
+    canvas = Canvas(cadreHaut, width=45, height=45)
+    # Créer un cadre permettant d'insérer une image
+    canvas.create_image(0, 0, anchor=NW, image=imageValider)
+    canvas.image = imageValider  # On insère l'image dans le canvas
+
+    boutonVisualiser = ttk.Button(cadreBas,
+
+                                  text='Visualiser',
+
+                                  style="Bouton.TButton",
+
+                                  command=lambda: ouvrirSite(folderEntry.get_path()))
+
+    # Création du bouton Redemarer
+    boutonRedemarer = ttk.Button(cadreBas,
+
+                                 text='Redémarer',  # Texte affiché sur le bouton
+
+                                 style="Bouton.TButton",  # Style du bouton défini
+
+                                 command=lambda: [dissimuler(cadreFinal), afficher(cadreInitial)])  # Commande exécutée quand on clique sur le bouton
+
+    ########### Fin création des widgets ###########
+
+    ########### Affichage des widgets dans le cadre initial ###########
+
+    cadreHaut.pack(side=TOP, fill=BOTH)
+    # On positionne le widget en bas du cadre initial
+    cadreBas.pack(side=BOTTOM)
     label.place(x=145, y=30)
-
-    photo = PhotoImage(file='./images/valider.png')
-    canvas = Canvas(frame1, width=45, height=45)
-    canvas.create_image(0, 0, anchor=NW, image=photo)
-    canvas.image = photo
+    # On positionne le widget à une position x et y précise
     canvas.place(x=175, y=65)
-
-    boutonVisualiser = ttk.Button(frame2, text='Visualiser', style="W.TButton",
-                                  command=lambda: ouvrirSite(folderentry_sequence.get_path()))
-    boutonRedemarer = ttk.Button(frame2, text='Redémarer', style="W.TButton",  command=lambda: [
-                                 forget(cadreFinal), retrieve(cadreInitial)])
     boutonVisualiser.place(x=280, y=20)
     boutonRedemarer.place(x=30, y=20)
 
+    ########### Fin affichage ###########
 
-def creationApplication(titreApplication):
+# Fin def
 
-    # Création fenêtre application
 
-    window = Tk()
-    window.title(titreApplication)
-    window.geometry("400x200")
+# Début def
+def creerApplication(titreApplication):
+
+    ########### Création fenêtre application ###########
+
+    window = Tk()  # Création d'une fenêtre
+    window.title(titreApplication)  # On défini le titre de la fenêtre
+    window.geometry("400x200")  # Choix de la taille de l'application
+    # Ajout d'une icone personnalisée
     window.iconphoto(False, PhotoImage(file="./images/icon.png"))
+    # On désactive la possibilité de modifier la taille de l'application pour l'utilisateur
     window.resizable(width=0, height=0)
 
-    # Fin création fenêtre application
+    ########### Fin création fenêtre application ###########
 
-    styleBoutonsEcranFinal = ttk.Style()
-    styleBoutonsEcranFinal.configure('W.TButton', font=('calibri', 12, 'bold'),
-                                     foreground='BLACK', width=10)
-
-    styleBoutonEcranInit = ttk.Style()
-    styleBoutonEcranInit.configure('W2.TButton', font=('calibri', 15, 'bold'),
-                                   foreground='BLACK', width=14)
-
-    cadreFinal = ttk.Frame(window)
+    cadreFinal = ttk.Frame(window)  # Création d'un objet Frale
     cadreInitial = ttk.Frame(window)
-    affichageEcranInit(cadreInitial, cadreFinal, styleBoutonEcranInit)
-    affichageEcranFinal(cadreFinal, cadreInitial, styleBoutonsEcranFinal)
+    # Création du cadre initial et récupération de l'adresse du site Web
+    creerCadreInitial(cadreInitial, cadreFinal)
+    creerCadreFinal(cadreFinal, cadreInitial)
+    afficher(cadreInitial)  # Affichage du cadre initial
 
-    # print(fileentry_sequence.get_path()) #Permet de récupérer l'adresse du fichier.mm
+    window.mainloop()  # Affiche la fenêtre et attend une action de la part de l'utilisateur
 
-    window.mainloop()
+# Fin def
 
 
-creationApplication('Générateur de site web')
+creerApplication('Générateur de site web')  # Création de l'application
