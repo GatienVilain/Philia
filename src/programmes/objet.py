@@ -169,7 +169,7 @@ def generer_pages_objets(chemin_entree, chemin_destination):
 
 # ----- TEST -----
 if __name__ == '__main__':
-    doc = et.parse('TITRE.mm')
+    doc = et.parse('TEST.mm')
 
     root = doc.getroot()
 
