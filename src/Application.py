@@ -9,6 +9,7 @@ from os import startfile
 # Pour importer le programme servant à générer le site web
 from programmes.generer_pages import generer_pages_liste
 from programmes.objet import generer_pages_objets
+from programmes.objet_heritage import generer_pages_heritage
 
 # Début class PathEntry
 
@@ -174,7 +175,7 @@ def verificationFichierMindMap(cadreInitial, cadreChoixMode, boutonGenerer, labe
         dissimuler(labelErreur)  # On cache le label erreur
         dissimuler(cadreInitial)  # On cache le cadre initial
         # afficher(cadreFinal) #On affiche le cadre final
-        cadreInitial.master.geometry("200x60")
+        cadreInitial.master.geometry("200x90")
         afficher(cadreChoixMode)
         # genererSite(cadreInitial, cadreFinal, adresseMindMap, folderEntry.get_path()) #On appelle la fonction genererSite
 
@@ -209,6 +210,17 @@ def genererSiteListes(adresseMindMap, adresseSite):
 
     # On démarre la création du site avec le programme sans objet
     generer_pages_liste(adresseMindMap, adresseSite)
+# Fin def
+
+
+# La fonction démarre la génération du site avec le mode objet héritage
+def genererSiteHeritage(adresseMindMap, adresseSite):
+
+    if adresseSite == "":
+        adresseSite = str(Path.home() / "Downloads")
+
+    # On démarre la création du site avec le programme objet avec héritage
+    generer_pages_heritage(adresseMindMap, adresseSite)
 # Fin def
 
 
@@ -441,13 +453,24 @@ def creerCadreChoixMode(cadreInitial, cadreFinal, cadreChoixMode):
 
                                   command=lambda: [genererSiteListes(fileEntry.get_path(), folderEntry.get_path()), afficher(cadreFinal), dissimuler(cadreChoixMode), cadreInitial.master.geometry("400x200")])  # Commande exécutée quand on clique sur le bouton
 
+    boutonModeHeritage = ttk.Button(cadreChoixMode,
+
+                                    text='Heritage',  # Texte affiché sur le bouton
+
+                                    style="Bouton.TButton",  # Style du bouton défini
+
+                                    command=lambda: [genererSiteHeritage(fileEntry.get_path(), folderEntry.get_path()), afficher(cadreFinal), dissimuler(cadreChoixMode), cadreInitial.master.geometry("400x200")])  # Commande exécutée quand on clique sur le bouton
+
     ########### Fin création des widgets ###########
 
     ########### Affichage des widgets dans le cadre initial ###########
 
     # On affiche le boutonModeNormal dans la frame cadreChoixMode
+
+    # On affiche le boutonModeNormal dans la frame cadreChoixMode
     boutonModeNormal.pack(side=TOP)
-    boutonModeObjet.pack(side=BOTTOM)
+    boutonModeObjet.pack()
+    boutonModeHeritage.pack(side=BOTTOM)
 
     ########### Fin affichage ###########
 
