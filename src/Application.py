@@ -7,8 +7,8 @@ from pathlib import Path  # Pour récupérer l'adresse du dossier download
 from os import startfile
 
 # Pour importer le programme servant à générer le site web
-from programmes.generer_pages import *
-from programmes.objet import *
+from programmes.generer_pages import generer_pages_liste
+from programmes.objet import generer_pages_objets
 
 # Début class PathEntry
 
@@ -204,11 +204,11 @@ def genererSiteObjets(adresseMindMap, adresseSite):
 # La fonction démarre la génération du site avec le mode Liste
 def genererSiteListes(adresseMindMap, adresseSite):
 
-    if adresseSite == "": 
+    if adresseSite == "":
         adresseSite = str(Path.home() / "Downloads")
 
     # On démarre la création du site avec le programme sans objet
-    generer_pages(adresseMindMap, adresseSite)
+    generer_pages_liste(adresseMindMap, adresseSite)
 # Fin def
 
 
@@ -423,7 +423,6 @@ def creerCadreChoixMode(cadreInitial, cadreFinal, cadreChoixMode):
 
     ########### Fin de la création et initialisation du style des widgets ###########
 
-
     ########### Création des widgets composant le cadre initial ###########
 
     boutonModeObjet = ttk.Button(cadreChoixMode,
@@ -444,10 +443,10 @@ def creerCadreChoixMode(cadreInitial, cadreFinal, cadreChoixMode):
 
     ########### Fin création des widgets ###########
 
-
     ########### Affichage des widgets dans le cadre initial ###########
 
-    boutonModeNormal.pack(side=TOP) #On affiche le boutonModeNormal dans la frame cadreChoixMode
+    # On affiche le boutonModeNormal dans la frame cadreChoixMode
+    boutonModeNormal.pack(side=TOP)
     boutonModeObjet.pack(side=BOTTOM)
 
     ########### Fin affichage ###########

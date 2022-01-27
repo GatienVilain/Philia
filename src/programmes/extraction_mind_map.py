@@ -1,4 +1,4 @@
-from xml.dom import minidom
+from xml.dom.minidom import parse
 
 
 class texte:
@@ -25,7 +25,7 @@ def extraction_texte(nom_fichier):
     # decoupage du fichier en bloc pour connaitre le nombre de lectures a effectuer
     L = charge_fichier(nom_fichier)
     # mise en memoire du XML a travers la bibliotheque minidom
-    file = minidom.parse(nom_fichier)
+    file = parse(nom_fichier)
     for i in range(len(L)):
         textetampon = texte()
         try:  # si element texte existe dans la node, alors on le met en memoire comme contenu
