@@ -20,22 +20,20 @@
 
 
 <div align="center">
-    <h1 style="display:flex; justify-content:space-around; align-items: center; flex-wrap: wrap; font-size:3.5em; padding: 2vh 25vw; margin:">
-        <img src="./src/images/icon.png" alt="" width=150  style="padding: 20px; background-color:white; border-radius: 1em;">
-        Philia
-    </h1>
+    <img src="./src/images/icon.png" alt="" width=200  style="padding: 20px; background-color:white; border-radius: 1em;">
+    <h1 style="margin: 1vh">Philia</h1>
 
 [![license][license-image]][license-url]
 </div>
 
 
-Dans le cadre du projet de mi-année de première année d'école d'ingénieur à **Junia ISEN Lille**, il nous a été demandé de programmer un générateur de site internet prenant comme base un fichier [mind map][documentation-mindmap-url] (.mm)
+Dans le cadre du projet de mi-année de première année d'école d'ingénieurs à **Junia ISEN Lille**, il nous a été demandé de programmer un générateur de site internet prenant comme base un fichier [mind map][documentation-mindmap-url] (.mm)
 
 ## Fonctionnalités
 
-* 3 mode de génération, pour s'adapter à ta manière de consevoir ta mind map.
-* Un interface graphique ([TkInter][documentation-tkinter-url]) pour rentre l'utilisation du générateur plus convivial.
-* Ouvre le fichier mind map dans ton éditeur de carte mentale directement depuis *Philia* puis regénére ton site internet en appuiant sur un seul bouton.
+* 3 modes de génération, pour s'adapter à ta manière de concevoir ta mind map.
+* Une interface graphique ([TkInter][documentation-tkinter-url]) pour rendre l'utilisation du générateur plus convivial.
+* Ouvre le fichier mind map dans ton éditeur de cartes mentales directement depuis *Philia* puis regénére ton site internet en appuyant sur un seul bouton.
 
 ## Téléchargement
 
@@ -48,15 +46,15 @@ Trouve la dernière version du projet sous la [rubrique releases][releases-url],
 
 ### Version Setup
 
-Exécute simplement le fichier téléchargé et suis l'installation. Tu peux maintenant utiliser Philia comme n'importe quelle application windows.
+Exécute simplement le fichier téléchargé et suit l'installation. Tu peux maintenant utiliser Philia comme n'importe quelle application Windows.
 
 ### Version portable
 
-Décompresse l'archive téléchargé et clique sur *Philia.exe* pour lancer l'application.
+Décompresse l'archive téléchargée et clique sur *Philia.exe* pour lancer l'application.
 
-## Un Problème ?
+## Un problème ?
 
-Si tu rencontre des problèmes à l'utilisation, tu peux ouvrir un billet sous la rubrique [issues][issues-url] pour nous en informer.
+Si tu rencontres des problèmes à l'utilisation, tu peux ouvrir un billet sous la rubrique [issues][issues-url] pour nous en informer.
 Bien que ce projet ne soit plus actif, nous essayerons d'y jeter un coup d'oeil.
 
 ## Auteurs
