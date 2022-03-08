@@ -1,8 +1,8 @@
 <!-- GitHub -->
-[license-url]: https://github.com/GatienVilain/Binairo/blob/master/LICENSE "Ouvre la page de la licence"
+[license-url]: https://github.com/Philia-Polem/Philia/blob/main/LICENSE "Ouvre la page de la licence"
 [license-image]: https://img.shields.io/badge/license-MPL%20v2.0-blue.svg
-[releases-url]: https://github.com/GatienVilain/Binairo/releases "Ouvre la page des versions du projet"
-[issues-url]: https://github.com/GatienVilain/Binairo/issues "Ouvre la page des problèmes rencontrés"
+[releases-url]: https://github.com/Philia-Polem/Philia/releases "Ouvre la page des versions du projet"
+[issues-url]: https://github.com/Philia-Polem/Philia/issues "Ouvre la page des problèmes rencontrés"
 
 <!-- Documentations -->
 [documentation-mindmap-url]: https://fr.wikipedia.org/wiki/Carte_heuristique "Page wikipedia sur la carte mentale"
